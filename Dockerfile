@@ -13,7 +13,7 @@ RUN rabbitmq-plugins enable --offline rabbitmq_management
 
 ADD /files/startrmq.sh /usr/local/sbin/startrmq.sh
 ADD /files/rabbitmq.config /etc/rabbitmq/rabbitmq.config
-ADD /files/.erlang-cookie /var/lib/rabbitmq/.erlang.cookie
+ADD /files/.erlang.cookie /var/lib/rabbitmq/.erlang.cookie
 
 RUN chown rabbitmq /var/lib/rabbitmq/.erlang.cookie
 RUN chmod 700 /usr/local/sbin/startrmq.sh /var/lib/rabbitmq/.erlang.cookie
