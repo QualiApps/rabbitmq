@@ -11,7 +11,7 @@ while getopts ":m:c:r:" option; do
     c)
       CLUSTERED=1 ;;
     r)
-      RAM_NODE=1
+      RAM_NODE=1 ;;
     \?)
       echo "
 Usage: [options]
