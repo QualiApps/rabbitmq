@@ -9,4 +9,12 @@ Installation
 Start RabbitMQ broker as a daemon
 --------------
 
-`docker run -d -p 15672:15672 -p 1883:1883 -p 5672:5672 -h rabbitmq --name rabbitmq qapps/rabbitmq`
+`docker run -d -p 25672:25672 -p 4369:4369 -p 15672:15672 -p 1883:1883 -p 5672:5672 -h rabbitmq --name rabbitmq qapps/rabbitmq [options]`
+
+options:
+
+`-m` - master node IP
+
+`-c` - clustered
+
+`-r` - type node, if it's specify that RAM mode

@@ -35,11 +35,8 @@ else
                 # If clustered, but cluster with is not specified then again start normally, 
                 # could be the first server in the
                 # cluster
-                #service rabbitmq-server start
                 /usr/sbin/rabbitmq-server
         else
-                #service rabbitmq-server -detached
-                #/usr/sbin/rabbitmq-server
                 /etc/init.d/rabbitmq-server start
                 rabbitmqctl stop_app
                 if [ -z "$RAM_NODE" ]; then
@@ -47,8 +44,12 @@ else
                 else
                         rabbitmqctl join_cluster --ram rabbit@$CLUSTER_WITH
                 fi
+                
                 rabbitmqctl start_app
                 rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
+                
+                # Tail to keep the a foreground process active..
+                tail -f /var/log/rabbitmq/rabbit\@$HOSTNAME.log
         fi
 fi
 
