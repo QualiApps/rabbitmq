@@ -4,7 +4,6 @@ FROM fedora:21
 
 MAINTAINER Yury Kavaliou <test@test.com>
 
-RUN yum -y update
 RUN rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
 RUN yum install -y https://www.rabbitmq.com/releases/rabbitmq-server/v3.4.3/rabbitmq-server-3.4.3-1.noarch.rpm
 
