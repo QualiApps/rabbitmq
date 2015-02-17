@@ -15,6 +15,6 @@ options:
 
 `-m` - master node IP
 
-`-c` - clustered
+`-c` - enable clustered mode
 
-`-r` - type node, if it's specify that RAM mode
+`-r` - node type switch, RAM node if used, otherwise DISC node

@@ -11,15 +11,15 @@ while getopts ":m:c:r:" option; do
     c)
       CLUSTERED=1 ;;
     r)
-      RAM_NODE=1 ;;
+      RAM_NODE="--ram" ;;
     \?)
       echo "
 Usage: [options]
   Options:
 
    -m        master node IP
-   -c        clustered
-   -r        type node, if it specify that RAM mode
+   -c        enable clustered mode
+   -r        node type switch, RAM node if used, otherwise DISC node
    " >&2
       exit 1
       ;;
@@ -28,28 +28,25 @@ done
 
 if [ -z "$CLUSTERED" ]; then
         # if not clustered then start it normally as if it is a single server
-        #service rabbitmq-server start
         /usr/sbin/rabbitmq-server
 else
         if [ -z "$CLUSTER_WITH" ]; then
-                # If clustered, but cluster with is not specified then again start normally, 
-                # could be the first server in the
-                # cluster
+                # if clustered mode enabled, but CLUSTER_WITH is not specified then again start normally,
+                # could be the first server in the cluster
                 /usr/sbin/rabbitmq-server
         else
-                /etc/init.d/rabbitmq-server start
+                /usr/sbin/rabbitmq-server -detached
+
                 rabbitmqctl stop_app
-                if [ -z "$RAM_NODE" ]; then
-                        rabbitmqctl join_cluster rabbit@$CLUSTER_WITH
-                else
-                        rabbitmqctl join_cluster --ram rabbit@$CLUSTER_WITH
-                fi
-                
+                rabbitmqctl join_cluster $RAM_NODE rabbit@$CLUSTER_WITH
                 rabbitmqctl start_app
-                rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
+
+                #rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
+                rabbitmqctl set_policy ha-two "" '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
                 
-                # Tail to keep the a foreground process active..
+                # tail to keep the a foreground process active.
                 tail -f /var/log/rabbitmq/rabbit\@$HOSTNAME.log
         fi
 fi
 
+exec "$@"
