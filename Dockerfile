@@ -14,14 +14,14 @@ RUN yum install -y https://www.rabbitmq.com/releases/rabbitmq-server/v$RMQ_VERSI
 RUN rabbitmq-plugins enable --offline rabbitmq_mqtt
 RUN rabbitmq-plugins enable --offline rabbitmq_management
 
-COPY /files/startrmq.sh /usr/local/sbin/startrmq.sh
+COPY /files/rabbit_start.sh /usr/local/sbin/rabbit_start.sh
 COPY /files/rabbitmq.config /etc/rabbitmq/rabbitmq.config
 COPY /files/.erlang.cookie /var/lib/rabbitmq/.erlang.cookie
 
 RUN chown rabbitmq /var/lib/rabbitmq/.erlang.cookie
-RUN chmod 700 /usr/local/sbin/startrmq.sh /var/lib/rabbitmq/.erlang.cookie
+RUN chmod 700 /usr/local/sbin/rabbit_start.sh /var/lib/rabbitmq/.erlang.cookie
 
-ENTRYPOINT ["/bin/bash", "/usr/local/sbin/startrmq.sh"]
+ENTRYPOINT ["/bin/bash", "/usr/local/sbin/rabbit_start.sh"]
 
 VOLUME /var/log
 VOLUME /var/run
